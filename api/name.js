@@ -14,7 +14,7 @@ export default function handler(req, res) {
     if (!name) return res.status(400).json({ error: "İsim yok" });
 
     if (name === "Emir") {
-      res.status(200).json({ reply: "Ata" });
+      res.status(200).json({ reply: "Babapiro" });
     } else {
       res.status(200).json({ reply: `Merhaba ${name}!` });
     }
