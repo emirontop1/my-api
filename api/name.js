@@ -1,6 +1,6 @@
 export default function handler(req, res) {
   if (req.method === "POST") {
-    const { name } = req.body;  // Vercel default bodyParser ile çalışır
+    const { name } = req.body; // Vercel default parser
     if (!name) return res.status(400).json({ error: "İsim yok" });
 
     if (name === "Emir") {
