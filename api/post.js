@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   const timestamp = `${now.getDate().toString().padStart(2,'0')}.${(now.getMonth()+1).toString().padStart(2,'0')}.${now.getFullYear()}-${now.getHours().toString().padStart(2,'0')}.${now.getMinutes().toString().padStart(2,'0')}.${now.getSeconds().toString().padStart(2,'0')}`;
 
   try {
-    // Mevcut posts.json çek
+    // Mevcut posts.json dosyasını çek
     const fileRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
       headers: { Authorization: `token ${token}` }
     });
@@ -28,9 +28,9 @@ export default async function handler(req, res) {
     }
 
     const newPost = { content, timestamp };
-    existingPosts.unshift(newPost);
+    existingPosts.unshift(newPost); // en üste ekle
 
-    // GitHub’a push
+    // GitHub’a push et
     await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
       method: "PUT",
       headers: { Authorization: `token ${token}`, "Content-Type": "application/json" },
@@ -42,6 +42,7 @@ export default async function handler(req, res) {
     });
 
     res.status(200).json({ success: true, post: newPost });
+
   } catch(err) {
     res.status(500).json({ error: err.toString() });
   }
