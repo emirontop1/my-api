@@ -1,19 +1,23 @@
-export default function handler(req, res) {
+export default async function handler(req, res) {
+  // ---- CORS ----
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  if (req.method === "OPTIONS") return res.status(200).end();
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Sadece POST destekleniyor" });
   }
 
   const { endpoint, ...data } = req.body;
 
-  // === 1) NAME API ===
+  // === 1) Name API ===
   if (endpoint === "name") {
-    if (data.name === "Emir") {
-      return res.status(200).json({ reply: "Ata" });
-    }
+    if (data.name === "Emir") return res.status(200).json({ reply: "Ata" });
     return res.status(200).json({ reply: `Merhaba ${data.name || "?"}` });
   }
 
-  // === 2) CALC API ===
+  // === 2) Calc API ===
   if (endpoint === "calc") {
     const { a, b, operation } = data;
     if (typeof a !== "number" || typeof b !== "number") {
@@ -33,7 +37,7 @@ export default function handler(req, res) {
     return res.status(200).json({ result });
   }
 
-  // === 3) RANDOM PASSWORD API ===
+  // === 3) Random Password API ===
   if (endpoint === "password") {
     const length = data.length || 8;
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
@@ -44,7 +48,7 @@ export default function handler(req, res) {
     return res.status(200).json({ password: pass });
   }
 
-  // === 4) ROCK PAPER SCISSORS API ===
+  // === 4) Rock Paper Scissors API ===
   if (endpoint === "rps") {
     const choices = ["taş", "kağıt", "makas"];
     const opponent = choices[Math.floor(Math.random() * 3)];
@@ -60,6 +64,6 @@ export default function handler(req, res) {
     return res.status(200).json({ opponent, result });
   }
 
-  // === DEFAULT ===
+  // Default
   return res.status(400).json({ error: "Geçersiz endpoint" });
 }
